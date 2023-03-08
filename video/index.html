@@ -70,7 +70,7 @@
             function go() {
                 var url = $(".url").val();
                 var hash = url.replace(/^https:\/\/www.youtube.com\/watch\?v=([a-zA-Z])+.*$/, "\\1");
-                alert(hash)
+                location.href="pause.html?"+hash;
             }
             $(function(){
                 var queryString = window.location.search;
@@ -89,19 +89,18 @@
                         parts[0] = "";
                         var name = parts.join(":").substr(1);
                         if (name == "") name = hash;
-                        var html = "<a href='play.html?"+hash+":play:::::78'>"+name+"</a>";
+                        var html = "<a href='pause.html?"+hash+'>"+name+"</a>";
                         menu.unshift(html);                        
                     }
                 }
                 $(".list").html(menu.join("\n"));
             })
-            
         </script>
     </head>
     <body>
         <h1>Play Video</h1>
         <div class="form">
-            <form onsubmit="go()" action="play.html">
+            <form onsubmit="go()" action="pause.html">
                 <input class="url" type="text" placeholder="Youtube URL or Hash; <space> for Name"><input class="go" type="submit" value="Go!">
             </form>
         </div>
