@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Youtube. 100%. Iframe.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <style>
+            html, body { 
+                font-family: Raleway, Arial, sans-serif;
+                width: 100%; height: 100%; 
+                color: #fff; 
+                padding: 0; margin: 0;
+                background-color: #2431C7; 
+                background-size: contain;
+                text-align: center;
+            }
+            input {
+                font-family: Raleway, Arial, sans-serif;
+                font-size: 20px;
+                padding: 5px;
+                border:0;
+                border-radius: 5px;
+                margin: 5px;
+            }
+            input.url { width: 400px }
+            input.go { width: 75px }
+            h1 { 
+                font-weight: normal;
+                font-size: 30px;
+                padding: 0;
+                margin: 10px;
+            }
+            .list {
+                margin: 20px 120px;
+            }
+            .list a {
+                display: block;
+                margin: 20px 0px;
+                padding: 15px;
+                color: #2431C7 !important;
+                font-size: 15px;
+                line-height: 15px;
+                text-decoration: none;
+                background-color: rgba(255,255,255,0.9);
+            }
+            .list a:hover {
+                background-color: rgba(255,255,255,1);    
+            }
+            .list .x { 
+                cursor: pointer;
+                float: right; 
+                margin-right: -40px;
+                width: 40px;
+                font-size: 20px;
+                font-weight: bold;
+                line-height: 20px;
+                height: 30px;
+                padding-top: 15px;
+                background-color: rgba(255,255,255,0.25);
+                color: #2431C7;
+            }
+            .list .x:hover {
+                background-color: rgba(255,255,255,1);    
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            function go() {
+                var url = $(".url").val();
+                var hash = url.replace(/^https:\/\/www.youtube.com\/watch\?v=([a-zA-Z])+.*$/, "\\1");
+                alert(hash)
+            }
+            $(function(){
+                var queryString = window.location.search;
+                if (queryString == "")
+                {
+                    queryString = window.localStorage.getItem("videos");
+                }
+                var urlParams = new URLSearchParams(queryString);
+                var values = urlParams.values()
+                var menu = [];
+                for (var v of values) {
+                    if (v != "") {
+                        window.localStorage.setItem("videos", queryString);
+                        var parts = v.split(":");
+                        var hash = parts[0];
+                        parts[0] = "";
+                        var name = parts.join(":").substr(1);
+                        if (name == "") name = hash;
+                        var html = "<a href='play.html?"+hash+"'>"+name+"</a>";
+                        menu.unshift(html);                        
+                    }
+                }
+                $(".list").html(menu.join("\n"));
+            })
+            
+        </script>
+    </head>
+    <body>
+        <h1>Play Video</h1>
+        <div class="form">
+            <form onsubmit="go()" action="play.html">
+                <input class="url" type="text" placeholder="Youtube URL or Hash; <space> for Name"><input class="go" type="submit" value="Go!">
+            </form>
+        </div>
+        <div class="list">
+        </div>
+    </body>
+</html>

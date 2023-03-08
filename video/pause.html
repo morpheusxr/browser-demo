@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Youtube. 100%. Iframe.</title>
+        <style>
+            html, body { 
+                font-family: Arial, sans-serif;
+                width: 100%; height: 100%; 
+                color: #ddd; 
+                padding: 0; margin: 0;
+                background-color: #2431C7; 
+                background-image: url(video-bg.jpg);
+                background-size: contain;
+
+            }
+            .buttons-wrap {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 50%;
+                margin: 0;
+            }
+            .buttons {
+                text-align: center;
+                margin-top: -100px;
+            }
+            .buttons img {
+                background: #ffffff;
+                border-radius: 50px;
+                margin: 0 50px;
+                cursor: pointer;
+                opacity: 0.9;
+            }
+            .buttons img:hover {
+                opacity: 1;
+            }
+            .buttons.start .pause,
+            .buttons.start .rewind { display: none }
+            .buttons.pause .pause  { display: none }
+            .buttons.play  .pause,
+            .buttons.play  .play,
+            .buttons.play  .rewind { display: none }
+            .back {
+                text-align: center;
+                margin-top: 50px;
+            }
+            .back div {
+                display: inline-block;
+                padding: 10px;
+                font-size: 16px;
+                font-weight: bold;
+                background: rgba(255,255,255, 0.9);
+                color: #2431C7;
+                border-radius: 10px;
+            }
+            .back div:hover {
+                background: rgba(255,255,255, 1);
+                cursor: pointer;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script>
+            $(function(){
+                function undef(u) { return u };
+                var x, y, ms;
+                if (x  === undef()) x = 125;
+                if (y  === undef()) y = 55;
+                if (ms === undef()) ms = 10000;
+                var target = "play.html?";
+                function send(command, info) {
+                    var q = [videoHash, command, info,
+                        "mxr_click_timeout="+parseInt(ms/1000,10),
+                        "mxr_auto_click=1",
+                        "mxr_click_x="+x,
+                        "mxr_click_y="+y,
+                        "24"
+                        ];
+                    location.href=target + q.join(":")
+                }
+                function command(c, info) {
+                    $(".buttons").removeClass(["pause", "play", "start"])
+                    switch (c) {
+                        case "rewind":
+                            location.search = videoHash;
+                            break;
+                        case "play":
+                            $(".buttons").addClass("play");
+                            if (cmd.length < 2 || !cmd[1]) {
+                                send("start")
+                            } else {
+                                send("play", cmd[2]);
+                            }
+                            break;
+                    }
+                }
+                window.videoHash = false;
+                var cmd = location.search.substr(1).split(":");
+                if (cmd[0] != "") {
+                    videoHash = cmd[0];
+                    $("html, body").css("background-image", "url(https://img.youtube.com/vi/"+videoHash+"/0.jpg)" )
+                    if (cmd[1]) {
+                        command(cmd[1], cmd[2])
+                    }
+                }
+                $(".rewind").click(function(){ 
+                    command("rewind");
+                })
+                $(".play").click(function(){
+                    command("play");
+                })
+                $(".back div").click(function(){
+                    location.href="index.html";
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <div class="buttons-wrap">
+            <div class="buttons start">
+                <img class="rewind" src="video-rewind.png" width="200" height="200">
+                <img class="play" src="video-play.png" width="200" height="200">
+                <img class="pause" src="video-unpause.png" width="200" height="200">
+            </div>
+            <div class="back">
+                <div>CHOOSE VIDEO</div>
+            </div>
+        </div>
+    </body>
+</html>
